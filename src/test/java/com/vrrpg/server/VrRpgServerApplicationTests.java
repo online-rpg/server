@@ -1,4 +1,4 @@
-package com.vrrpg.vrrpgserver;
+package com.vrrpg.server;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
