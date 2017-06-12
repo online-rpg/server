@@ -17,6 +17,8 @@
         <java.version>1.8</java.version>
         <spring.platform-bom.version>Brussels-RELEASE</spring.platform-bom.version>
         <lombok.version>1.16.16</lombok.version>
+        <spring-boot-maven-plugin.version>1.5.4.RELEASE</spring-boot-maven-plugin.version>
+        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
     </properties>
 
     <dependencies>
@@ -60,8 +62,61 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireDepMgt>
+                                    <checkVersion>true</checkVersion>
+                                </requireDepMgt>
+                                <requireJavaVersion>
+                                    <version>[1.8,)</version>
+                                </requireJavaVersion>
+                                <requirePluginVersions>
+                                    <unCheckedPluginList>
+                                        org.apache.maven.plugins:maven-clean-plugin,
+                                        org.apache.maven.plugins:maven-install-plugin,
+                                        org.apache.maven.plugins:maven-site-plugin,
+                                        org.apache.maven.plugins:maven-deploy-plugin,
+                                        org.apache.maven.plugins:maven-surefire-plugin,
+                                        org.apache.maven.plugins:maven-jar-plugin,
+                                        org.apache.maven.plugins:maven-resources-plugin
+                                    </unCheckedPluginList>
+                                </requirePluginVersions>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.ceilfors.maven.plugin</groupId>
+                        <artifactId>enforcer-rules</artifactId>
+                        <version>1.2.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
