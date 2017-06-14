@@ -1,6 +1,5 @@
 package com.vrrpg.server.socket;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
