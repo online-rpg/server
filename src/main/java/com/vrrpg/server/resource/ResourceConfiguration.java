@@ -20,6 +20,8 @@ class ResourceConfiguration {
     @Bean
     @ConditionalOnMissingBean
     ResourceManager dummyResourceManager() {
+        LOGGER.info("{} environmental variable is not set. Dummy ResourceManager is being used!",
+                CloudinaryResourceManager.PROPERTY);
         return path -> {
             LOGGER.trace("getResource - {}", path);
             return context.getResource("classpath:dummy.png");
