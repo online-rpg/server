@@ -44,6 +44,9 @@ class CloudinaryResourceManager implements ResourceManager {
 
         try (Response response = client.newCall(request).execute()) {
             byte[] bytes = response.body().bytes();
+            if (bytes.length == 0) {
+                LOGGER.warn("File with name \'{}\' does not exist in cloud!", path);
+            }
             return new ByteArrayResource(bytes);
         } catch (IOException e) {
             LOGGER.warn(e.getMessage());
