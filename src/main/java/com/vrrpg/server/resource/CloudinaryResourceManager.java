@@ -35,7 +35,7 @@ class CloudinaryResourceManager implements ResourceManager {
     public Resource getResource(String path) {
         LOGGER.trace("getResource - {}", path);
 
-        String url = cloudinary.url().generate(path + ".jpg");
+        String url = cloudinary.url().generate(path);
 
         Request request = new Request.Builder()
                 .url(url)
