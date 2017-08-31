@@ -13,13 +13,13 @@ class ResourceConfiguration {
 
     private final ApplicationContext context;
 
-    public ResourceConfiguration(ApplicationContext context) {
+    ResourceConfiguration(ApplicationContext context) {
         this.context = context;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    ResourceManager dummyResourceManager() {
+    ImageResourceManager dummyResourceManager() {
         LOGGER.info("{} environmental variable is not set. Dummy ResourceManager is being used!",
                 CloudinaryResourceManager.PROPERTY);
         return path -> {

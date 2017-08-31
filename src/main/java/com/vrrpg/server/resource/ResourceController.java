@@ -13,7 +13,7 @@ class ResourceController {
 
     private final ResourceManager resourceManager;
 
-    ResourceController(ResourceManager resourceManager) {
+    ResourceController(ImageResourceManager resourceManager) {
         this.resourceManager = resourceManager;
     }
 

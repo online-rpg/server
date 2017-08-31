@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Component
 @ConditionalOnProperty(name = {CloudinaryResourceManager.PROPERTY})
-class CloudinaryResourceManager implements ResourceManager {
+class CloudinaryResourceManager implements ImageResourceManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(CloudinaryResourceManager.class);
     static final String PROPERTY = "cloudinary.url";
 
