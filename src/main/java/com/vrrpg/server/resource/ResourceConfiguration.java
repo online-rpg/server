@@ -19,12 +19,24 @@ class ResourceConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    ImageResourceManager dummyResourceManager() {
+    ImageResourceManager dummyImageResourceManager() {
         LOGGER.info("{} environmental variable is not set. Dummy ResourceManager is being used!",
                 CloudinaryResourceManager.PROPERTY);
         return path -> {
             LOGGER.trace("getResource - {}", path);
             return context.getResource("classpath:dummy.png");
+        };
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    MeshResourceManager dummyMeshResourceController() {
+        return path -> {
+            LOGGER.trace("getResource - {}", path);
+            if (path.endsWith(".manifest")) {
+                return null;
+            }
+            return context.getResource("classpath:" + path);
         };
     }
 }
