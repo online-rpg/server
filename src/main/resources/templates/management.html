@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot Thymeleaf Hello World Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="../../css/main.css" />
+
+</head>
+<body>
+
+    <form action="" th:action="@{fileUploadObj}" method="post" enctype="multipart/form-data">
+        <input type="file" name="myFile" />
+        <input type="submit" />
+    </form>
+
+    <form action="" th:action="@{fileUploadMtl}" method="post" enctype="multipart/form-data">
+        <input type="file" name="myFile" />
+        <input type="submit" />
+    </form>
+
+<script type="text/javascript" src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
