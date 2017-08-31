@@ -32,9 +32,10 @@ class CloudinaryResourceManager implements ImageResourceManager {
     }
 
     @Override
-    public Resource getResource(String path) {
-        LOGGER.trace("getResource - {}", path);
+    public Resource getResource(String name, String extension) {
+        LOGGER.trace("getResource - {}, {}", name, extension);
 
+        String path = name + "." + extension;
         String url = cloudinary.url().generate(path);
 
         Request request = new Request.Builder()

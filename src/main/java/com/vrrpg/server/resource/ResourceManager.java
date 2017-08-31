@@ -4,5 +4,5 @@ import org.springframework.core.io.Resource;
 
 interface ResourceManager {
 
-    Resource getResource(String path);
+    Resource getResource(String name, String extension);
 }
