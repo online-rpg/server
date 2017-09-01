@@ -34,6 +34,8 @@ The following environmental variable are available for configuring the vr-rpg-se
 |`CLOUDINARY_URL`             |`string`      |The url for the cloudinary service connection.   |
 |`LOG_LEVEL`                  |`trace`, `debug`, <br /> `info`, `warn`, <br /> `error`|Minimum log level configuration. Default value - `info`|
 |`MONGODB_URI`                |`string`      |The url for the mongoDB access. Default value - `mongodb://localhost/test`|
+|`SENTRY_DSN`                 |`string`      |Url for sentry.io integration.                   |
+|`SENTRY_LEVEL`               |`trace`, `debug`, <br /> `info`, `warn`, <br /> `error`|Minimum reporting level for sentry.io. Default value - `WARN`|
 
 Contact:
 gyorgy.bucsek@gmail.com
