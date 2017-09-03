@@ -1,7 +1,9 @@
 package com.vrrpg.server.socket;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.util.JsonFormat;
+import com.vrrpg.core.socket.GameMessage;
+import com.vrrpg.core.socket.GameMessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -19,19 +21,21 @@ import java.util.Objects;
 class SocketHandler extends TextWebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(SocketHandler.class);
 
-    private final ObjectMapper objectMapper;
     private final Map<WebSocketSession, String> aliveSessions;
 
-    SocketHandler(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    SocketHandler() {
         aliveSessions = new HashMap<>();
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         LOGGER.trace("handleTextMessage - {}, {}", session, message);
-        GameMessage gameMessage = objectMapper.readValue(message.getPayload(), GameMessage.class);
-        if ("join".equalsIgnoreCase(gameMessage.getEventName())) {
+
+        GameMessage.Builder builder = GameMessage.newBuilder();
+        JsonFormat.parser().ignoringUnknownFields().merge(message.getPayload(), builder);
+
+        GameMessage gameMessage = builder.build();
+        if (gameMessage.getEventType() == GameMessageType.JOIN) {
             aliveSessions.put(session, gameMessage.getEventSource());
         }
         broadcast(gameMessage, session);
@@ -49,14 +53,20 @@ class SocketHandler extends TextWebSocketHandler {
         LOGGER.trace("afterConnectionClosed - {}, {}", session, status);
         if (aliveSessions.containsKey(session)) {
             String eventSource = aliveSessions.get(session);
-            broadcast(new GameMessage("leave", eventSource, new HashMap<>()), session);
+
+            broadcast(GameMessage.newBuilder()
+                            .setEventType(GameMessageType.LEAVE)
+                            .setEventSource(eventSource)
+                            .putAllEventContent(new HashMap<>())
+                            .build(),
+                    session);
         }
         aliveSessions.remove(session);
     }
 
     private void broadcast(GameMessage message, WebSocketSession currentSession) {
         try {
-            TextMessage textMessage = new TextMessage(objectMapper.writeValueAsString(message));
+            TextMessage textMessage = new TextMessage(JsonFormat.printer().print(message.toBuilder()));
             aliveSessions.keySet().stream().filter(s -> !Objects.equals(s, currentSession)).forEach(aliveSession -> {
                 try {
                     aliveSession.sendMessage(textMessage);
@@ -64,7 +74,7 @@ class SocketHandler extends TextWebSocketHandler {
                     LOGGER.warn(e.getMessage());
                 }
             });
-        } catch (JsonProcessingException e) {
+        } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
     }
