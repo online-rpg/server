@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "com.vrrpg.core.socket";
+option java_multiple_files = true;
+
+enum GameMessageType {
+  UNKNOWN = 0;
+  JOIN = 1;
+  MOVE = 2;
+  LEAVE = 3;
+  GET_STATE = 4;
+  STATE = 5;
+}
+
+message GameMessage {
+  GameMessageType event_type = 1;
+  string event_source = 2;
+  map<string, string> event_content = 3;
+}
