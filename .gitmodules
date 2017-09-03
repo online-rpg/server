@@ -1,3 +1,0 @@
-[submodule "src/main/proto"]
-	path = src/main/proto
-	url = git@bitbucket.org:vrrpg/vr-rpg-proto.git
