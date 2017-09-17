@@ -15,5 +15,7 @@ enum GameMessageType {
 message GameMessage {
   GameMessageType event_type = 1;
   string event_source = 2;
-  map<string, string> event_content = 3;
+  double x = 3;
+  double y = 4;
+  double z = 5;
 }

@@ -1,6 +1,8 @@
 package com.vrrpg.server.socket;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
+import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.util.JsonFormat;
 import com.vrrpg.core.socket.GameMessage;
 import com.vrrpg.core.socket.GameMessageType;
@@ -31,10 +33,8 @@ class SocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         LOGGER.trace("handleTextMessage - {}, {}", session, message);
 
-        GameMessage.Builder builder = GameMessage.newBuilder();
-        JsonFormat.parser().ignoringUnknownFields().merge(message.getPayload(), builder);
+        GameMessage gameMessage = parseMessage(message.getPayload(), GameMessage.newBuilder());
 
-        GameMessage gameMessage = builder.build();
         if (gameMessage.getEventType() == GameMessageType.JOIN) {
             aliveSessions.put(session, gameMessage.getEventSource());
         }
@@ -56,17 +56,15 @@ class SocketHandler extends TextWebSocketHandler {
 
             broadcast(GameMessage.newBuilder()
                             .setEventType(GameMessageType.LEAVE)
-                            .setEventSource(eventSource)
-                            .putAllEventContent(new HashMap<>())
-                            .build(),
+                            .setEventSource(eventSource),
                     session);
         }
         aliveSessions.remove(session);
     }
 
-    private void broadcast(GameMessage message, WebSocketSession currentSession) {
+    private void broadcast(MessageOrBuilder message, WebSocketSession currentSession) {
         try {
-            TextMessage textMessage = new TextMessage(JsonFormat.printer().print(message.toBuilder()));
+            TextMessage textMessage = new TextMessage(JsonFormat.printer().print(message));
             aliveSessions.keySet().stream().filter(s -> !Objects.equals(s, currentSession)).forEach(aliveSession -> {
                 try {
                     aliveSession.sendMessage(textMessage);
@@ -74,6 +72,16 @@ class SocketHandler extends TextWebSocketHandler {
                     LOGGER.warn(e.getMessage());
                 }
             });
+        } catch (InvalidProtocolBufferException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends Message> T parseMessage(String textMessage, T.Builder builder) {
+        try {
+            JsonFormat.parser().ignoringUnknownFields().merge(textMessage, builder);
+            return (T) builder.build();
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
