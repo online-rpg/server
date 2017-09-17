@@ -18,7 +18,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <spring.platform-bom.version>Brussels-RELEASE</spring.platform-bom.version>
-        <lombok.version>1.16.16</lombok.version>
+        <lombok.version>1.16.18</lombok.version>
         <spring-boot-maven-plugin.version>1.5.4.RELEASE</spring-boot-maven-plugin.version>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <appengine.maven.plugin>1.3.1</appengine.maven.plugin>
