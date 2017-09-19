@@ -25,6 +25,15 @@
     2. [only at first] `mvn clean install` - prepares the project for run
     3. `mvn spring-boot:run` - runs the project from cmd|terminal
 
+## REST Endpoints
+
+|Path                            |Method|Additional Parameters|Response                          |
+|`/games`                        |`GET` |                     |Collection of `ApiGameDescription`|
+|`/games/{game_id}`              |`GET` |                     |`ApiGameDescription`              |
+|`/games/meshes/{mesh_id}`       |`GET` |                     |`ApiMeshDescription`              |
+|`/resources/meshes/{mesh}`      |`GET` |                     |File with either `.obj` or `.mtl` extension|
+|`/resources/textures/{resource}`|`GET` |                     |Image file                        |
+
 ## Configuration
 
 The following environmental variable are available for configuring the vr-rpg-server:
