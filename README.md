@@ -28,6 +28,7 @@
 ## REST Endpoints
 
 |Path                            |Method|Additional Parameters|Response                          |
+|--------------------------------|------|---------------------|----------------------------------|
 |`/games`                        |`GET` |                     |Collection of `ApiGameDescription`|
 |`/games/{game_id}`              |`GET` |                     |`ApiGameDescription`              |
 |`/games/meshes/{mesh_id}`       |`GET` |                     |`ApiMeshDescription`              |
