@@ -4,8 +4,8 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.util.JsonFormat;
-import com.vrrpg.core.communication.model.GameMessage;
-import com.vrrpg.core.communication.model.GameMessageType;
+import com.vrrpg.core.communication.model.SocketGameMessage;
+import com.vrrpg.core.communication.model.SocketGameMessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -33,9 +33,9 @@ class SocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         LOGGER.trace("handleTextMessage - {}, {}", session, message);
 
-        GameMessage gameMessage = parseMessage(message.getPayload(), GameMessage.newBuilder());
+        SocketGameMessage gameMessage = parseMessage(message.getPayload(), SocketGameMessage.newBuilder());
 
-        if (gameMessage.getEventType() == GameMessageType.JOIN) {
+        if (gameMessage.getEventType() == SocketGameMessageType.JOIN) {
             aliveSessions.put(session, gameMessage.getEventSource());
         }
         broadcast(gameMessage, session);
@@ -54,8 +54,8 @@ class SocketHandler extends TextWebSocketHandler {
         if (aliveSessions.containsKey(session)) {
             String eventSource = aliveSessions.get(session);
 
-            broadcast(GameMessage.newBuilder()
-                            .setEventType(GameMessageType.LEAVE)
+            broadcast(SocketGameMessage.newBuilder()
+                            .setEventType(SocketGameMessageType.LEAVE)
                             .setEventSource(eventSource),
                     session);
         }
