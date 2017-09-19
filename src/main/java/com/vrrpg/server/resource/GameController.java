@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @Controller
 @RequestMapping("game")
 class GameController {
@@ -16,6 +18,14 @@ class GameController {
 
     GameController(GameDescriptionProvider gameDescriptionProvider) {
         this.gameDescriptionProvider = gameDescriptionProvider;
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping
+    @ResponseBody
+    Collection<ApiGameDescription> getGames() throws GameDescriptionNotFoundException {
+        LOGGER.trace("getGames");
+        return gameDescriptionProvider.getGames().orElseThrow(GameDescriptionNotFoundException::new);
     }
 
     @CrossOrigin(origins = "*")

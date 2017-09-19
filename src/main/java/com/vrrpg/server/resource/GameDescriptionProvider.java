@@ -10,9 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.StreamSupport.stream;
 
 @Component
 class GameDescriptionProvider {
@@ -27,6 +31,26 @@ class GameDescriptionProvider {
         this.meshDescriptionRepository = meshDescriptionRepository;
     }
 
+    Optional<Collection<ApiGameDescription>> getGames() {
+        LOGGER.trace("getGames");
+
+        Iterable<GameDescription> all = gameDescriptionRepository.findAll();
+
+        if (all == null) {
+            return empty();
+        }
+
+        List<ApiGameDescription> result = stream(all.spliterator(), false)
+                .map(this::convertGameDescription)
+                .collect(toList());
+
+        if (result.isEmpty()) {
+            return empty();
+        }
+
+        return of(result);
+    }
+
     Optional<ApiGameDescription> getGameDescription(String id) {
         LOGGER.trace("getGameDescription - {}", id);
 
@@ -36,13 +60,15 @@ class GameDescriptionProvider {
             return empty();
         }
 
-        ApiGameDescription.Builder builder = ApiGameDescription.newBuilder();
+        return of(convertGameDescription(gameDescription));
+    }
 
+    private ApiGameDescription convertGameDescription(GameDescription gameDescription) {
+        ApiGameDescription.Builder builder = ApiGameDescription.newBuilder();
         ofNullable(gameDescription.getId()).ifPresent(builder::setId);
         ofNullable(gameDescription.getName()).ifPresent(builder::setName);
         ofNullable(gameDescription.getObjects()).ifPresent(builder::addAllObjects);
-
-        return of(builder.build());
+        return builder.build();
     }
 
     Optional<ApiMeshDescription> getMeshDescription(String id) {
