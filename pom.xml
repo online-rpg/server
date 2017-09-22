@@ -12,21 +12,21 @@
     <description>Backend for VR-RPG game</description>
 
     <properties>
-        <cloudinary-http44.version>1.13.0</cloudinary-http44.version>
+        <cloudinary-http44.version>1.15.0</cloudinary-http44.version>
+        <com.google.protobuf.protobuf.version>3.4.0</com.google.protobuf.protobuf.version>
         <java.version>1.8</java.version>
         <lombok.version>1.16.18</lombok.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
-        <okhttp.version>3.8.1</okhttp.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+        <okhttp.version>3.9.0</okhttp.version>
         <org.webjars.bootstrap.version>3.3.7</org.webjars.bootstrap.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <protobuf.version>3.4.0</protobuf.version>
         <protobuf-java-format.version>1.4</protobuf-java-format.version>
-        <sentry-logback.version>1.5.2</sentry-logback.version>
-        <spring.platform-bom.version>Brussels-RELEASE</spring.platform-bom.version>
-        <spring-boot-maven-plugin.version>1.5.4.RELEASE</spring-boot-maven-plugin.version>
+        <sentry-logback.version>1.5.3</sentry-logback.version>
+        <spring.platform-bom.version>Brussels-SR5</spring.platform-bom.version>
+        <spring-boot-maven-plugin.version>1.5.7.RELEASE</spring-boot-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -122,12 +122,12 @@
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>${protobuf.version}</version>
+                <version>${com.google.protobuf.protobuf.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java-util</artifactId>
-                <version>${protobuf.version}</version>
+                <version>${com.google.protobuf.protobuf.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.googlecode.protobuf-java-format</groupId>
@@ -250,7 +250,7 @@
                             <goal>test-compile</goal>
                         </goals>
                         <configuration>
-                            <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+                            <protocArtifact>com.google.protobuf:protoc:${com.google.protobuf.protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
                         </configuration>
                     </execution>
                 </executions>
