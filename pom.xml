@@ -12,11 +12,14 @@
     <description>Backend for VR-RPG game</description>
 
     <properties>
+        <cloudinary-http44.version>1.13.0</cloudinary-http44.version>
         <java.version>1.8</java.version>
         <lombok.version>1.16.18</lombok.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+        <okhttp.version>3.8.1</okhttp.version>
+        <org.webjars.bootstrap.version>3.3.7</org.webjars.bootstrap.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <protobuf.version>3.4.0</protobuf.version>
@@ -112,7 +115,7 @@
             <dependency>
                 <groupId>org.webjars</groupId>
                 <artifactId>bootstrap</artifactId>
-                <version>3.3.7</version>
+                <version>${org.webjars.bootstrap.version}</version>
             </dependency>
 
             <!-- Protobuf -->
@@ -143,13 +146,13 @@
             <dependency>
                 <groupId>com.cloudinary</groupId>
                 <artifactId>cloudinary-http44</artifactId>
-                <version>1.13.0</version>
+                <version>${cloudinary-http44.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
-                <version>3.8.1</version>
+                <version>${okhttp.version}</version>
             </dependency>
 
             <!-- Sentry.io -->
