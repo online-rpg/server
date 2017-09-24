@@ -34,6 +34,8 @@
 |`/games/meshes/{mesh_id}`       |`GET` |                     |`ApiMeshDescription`              |
 |`/resources/meshes/{mesh}`      |`GET` |                     |File with either `.obj` or `.mtl` extension|
 |`/resources/textures/{resource}`|`GET` |                     |Image file                        |
+|`/management/fileUploadObj/`    |`POST`|                     |No response. Just a code          |
+|`/management/fileUploadMtl/`    |`POST`|                     |No response. Just a code          |
 
 ## Configuration
 
