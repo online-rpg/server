@@ -15,11 +15,11 @@
         <cloudinary-http44.version>1.15.0</cloudinary-http44.version>
         <com.google.protobuf.protobuf.version>3.4.0</com.google.protobuf.protobuf.version>
         <java.version>1.8</java.version>
+        <java-jwt.version>3.2.0</java-jwt.version>
         <lombok.version>1.16.18</lombok.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-        <oauth.version>2.2.0.RELEASE</oauth.version>
         <okhttp.version>3.9.0</okhttp.version>
         <org.webjars.bootstrap.version>3.3.7</org.webjars.bootstrap.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -56,12 +56,13 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-jwt</artifactId>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
         </dependency>
 
         <!-- Protobuf -->
@@ -111,16 +112,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.security.oauth</groupId>
-                <artifactId>spring-security-oauth2</artifactId>
-                <version>${oauth.version}</version>
-            </dependency>
 
             <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>bootstrap</artifactId>
-                <version>${org.webjars.bootstrap.version}</version>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java-jwt.version}</version>
             </dependency>
 
             <!-- Protobuf -->
