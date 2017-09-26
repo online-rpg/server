@@ -1,6 +1,5 @@
 package com.vrrpg.server.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,10 +18,11 @@ import java.util.Collections;
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JWTLoginFilter.class);
+    private final TokenAuthenticationService tokenAuthenticationService;
 
-    JWTLoginFilter(String url, AuthenticationManager authManager) {
+    JWTLoginFilter(String url, AuthenticationManager authManager, TokenAuthenticationService tokenAuthenticationService) {
         super(new AntPathRequestMatcher(url));
-        LOGGER.trace("JWTLoginFilter");
+        this.tokenAuthenticationService = tokenAuthenticationService;
         setAuthenticationManager(authManager);
     }
 
@@ -30,11 +30,12 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
             throws AuthenticationException, IOException, ServletException {
         LOGGER.trace("attemptAuthentication");
-        AccountCredentials creds = new ObjectMapper().readValue(req.getInputStream(), AccountCredentials.class);
+        String[] usernames = req.getParameterMap().get("username");
+        String[] passwords = req.getParameterMap().get("password");
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        creds.getUsername(),
-                        creds.getPassword(),
+                        usernames[0],
+                        passwords[0],
                         Collections.emptyList()
                 )
         );
@@ -44,6 +45,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
         LOGGER.trace("successfulAuthentication");
-        TokenAuthenticationService.addAuthentication(res, auth.getName());
+        tokenAuthenticationService.addAuthentication(res, auth.getName());
     }
 }
