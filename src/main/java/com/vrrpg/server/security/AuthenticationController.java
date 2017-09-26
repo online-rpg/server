@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class AuthenticationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
+    @PreAuthorize("#oauth2.hasScope('read')")
     @CrossOrigin("*")
     @RequestMapping(path = "/create", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity createSession(@RequestParam("username") String username,

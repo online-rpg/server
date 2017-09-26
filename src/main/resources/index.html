@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Page Title</title>
+
+    <script>
+        var tokens = {}
+        var clientPwd = btoa("vrRpgPassword:secret")
+
+        function login() {
+            var formData = new FormData();
+            formData.append("grant_type", "password")
+            formData.append("username", "admin")
+            formData.append("password", "1234")
+            formData.append("client_id", "vrRpgPassword")
+            formData.append("client_secret", "secret")
+
+
+            let options = {
+                method: 'POST',
+                mode: 'cors',
+                body: formData,
+                headers: {
+                    "Authorization": "Basic " + clientPwd
+                }
+            }
+
+            //fetch('http://localhost:8080/spring-security-oauth-server/oauth/token', options).then(function (value) {
+            fetch('http://localhost:8080/oauth/token', options).then(function (value) {
+                return value.json()
+            }).then(function (json) {
+                console.log(json)
+                tokens.access_token = json.access_token
+                tokens.refresh_token = json.refresh_token
+                tokens.token_type = json.token_type
+                tokens.jti = json.jti
+            }).catch(function (err) {
+                console.warn(err)
+            });
+            return;
+        }
+
+        function refresh() {
+            var formData = new FormData();
+            formData.append("grant_type", "refresh_token")
+            //formData.append("username", "admin")
+            //formData.append("password", "1234")
+            formData.append("client_id", "vrRpgPassword")
+            formData.append("client_secret", "secret")
+            formData.append("refresh_token", tokens.refresh_token)
+
+            let options = {
+                method: 'POST',
+                mode: 'cors',
+                body: formData,
+                headers: {
+                    "Authorization": "Basic " + clientPwd
+                }
+            }
+
+            console.log(options.headers)
+            fetch('http://localhost:8080/oauth/token', options).then(function (response) {
+                //console.log(response)
+                return response.json()
+            }).then(function (json) {
+                console.log(json)
+            }).catch(function (err) {
+                console.warn(err)
+            })
+        }
+
+        function fetchData() {
+            let options = {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    "Authorization": "Bearer" + " " + tokens.access_token
+                }
+            }
+
+            console.log(options.headers)
+            fetch('http://localhost:8080/game', options).then(function (response) {
+                //console.log(response)
+                return response.json()
+            }).then(function (json) {
+                console.log(json)
+            }).catch(function (err) {
+                console.warn(err)
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+<h1>Login</h1>
+<label>Username</label><input ng-model="data.username" />
+<label>Password</label><input type="password" ng-model="data.password" />
+<button onClick="login()">Login</button>
+<button onclick="refresh()">Refresh</button>
+<button onclick="fetchData()">Fetch</button>
+</body>
+
+</html>
