@@ -1,4 +1,4 @@
-# VR-RPG Server
+# VR-RPG Server [![Build Status](https://travis-ci.org/vrpg/server.svg?branch=master)](https://travis-ci.org/vrpg/server)
 
 ## Development requirements
 - java8 JDK (`http://www.oracle.com/technetwork/java/javase/downloads/index.html`)
