@@ -11,6 +11,13 @@
     <name>vr-rpg-server</name>
     <description>Backend for VR-RPG game</description>
 
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+        </license>
+    </licenses>
+
     <properties>
         <cloudinary-http44.version>1.15.0</cloudinary-http44.version>
         <com.google.protobuf.protobuf.version>3.4.0</com.google.protobuf.protobuf.version>
@@ -251,7 +258,9 @@
                             <goal>test-compile</goal>
                         </goals>
                         <configuration>
-                            <protocArtifact>com.google.protobuf:protoc:${com.google.protobuf.protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
+                            <protocArtifact>
+                                com.google.protobuf:protoc:${com.google.protobuf.protobuf.version}:exe:${os.detected.classifier}
+                            </protocArtifact>
                         </configuration>
                     </execution>
                 </executions>
