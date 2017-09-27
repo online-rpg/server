@@ -1,4 +1,4 @@
-# VR-RPG Server [![Build Status](https://travis-ci.org/vrpg/server.svg?branch=master)](https://travis-ci.org/vrpg/server)
+# VRPG Server [![Build Status](https://travis-ci.org/vrpg/server.svg?branch=master)](https://travis-ci.org/vrpg/server)
 
 ## Development requirements
 - java8 JDK (`http://www.oracle.com/technetwork/java/javase/downloads/index.html`)
@@ -17,7 +17,7 @@
     0. start mongodb (or setup the `MONGODB_URI` as environment variable for a remote mongodb)
     1. File -> New -> Project from existing sources...
     2. Select the `pom.xml`, then next next next next...
-    3. Create run configuration that runs `com.vrrpg.server.VrRpgServerApplication`
+    3. Create run configuration that runs `VrRpgServerApplication`
     4. [optional] Setup environment variables in the configuration (see configuration below)
 
 - Run project (from CMD)
