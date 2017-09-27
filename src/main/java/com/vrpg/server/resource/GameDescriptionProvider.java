@@ -1,11 +1,9 @@
 package com.vrpg.server.resource;
 
-import com.vrpg.server.mongo.GameDescriptionRepository;
-import com.vrpg.server.mongo.MeshDescriptionRepository;
-import com.vrrpg.core.communication.model.ApiGameDescription;
-import com.vrrpg.core.communication.model.ApiMeshDescription;
 import com.vrpg.server.mongo.GameDescription;
+import com.vrpg.server.mongo.GameDescriptionRepository;
 import com.vrpg.server.mongo.MeshDescription;
+import com.vrpg.server.mongo.MeshDescriptionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,7 +29,7 @@ class GameDescriptionProvider {
         this.meshDescriptionRepository = meshDescriptionRepository;
     }
 
-    Optional<Collection<ApiGameDescription>> getGames() {
+    Optional<Collection<com.vrpg.communication.resource.GameDescription>> getGames() {
         LOGGER.trace("getGames");
 
         Iterable<GameDescription> all = gameDescriptionRepository.findAll();
@@ -40,7 +38,7 @@ class GameDescriptionProvider {
             return empty();
         }
 
-        List<ApiGameDescription> result = stream(all.spliterator(), false)
+        List<com.vrpg.communication.resource.GameDescription> result = stream(all.spliterator(), false)
                 .map(this::convertGameDescription)
                 .collect(toList());
 
@@ -51,7 +49,7 @@ class GameDescriptionProvider {
         return of(result);
     }
 
-    Optional<ApiGameDescription> getGameDescription(String id) {
+    Optional<com.vrpg.communication.resource.GameDescription> getGameDescription(String id) {
         LOGGER.trace("getGameDescription - {}", id);
 
         GameDescription gameDescription = gameDescriptionRepository.findOne(id);
@@ -63,15 +61,15 @@ class GameDescriptionProvider {
         return of(convertGameDescription(gameDescription));
     }
 
-    private ApiGameDescription convertGameDescription(GameDescription gameDescription) {
-        ApiGameDescription.Builder builder = ApiGameDescription.newBuilder();
+    private com.vrpg.communication.resource.GameDescription convertGameDescription(GameDescription gameDescription) {
+        com.vrpg.communication.resource.GameDescription.Builder builder = com.vrpg.communication.resource.GameDescription.newBuilder();
         ofNullable(gameDescription.getId()).ifPresent(builder::setId);
         ofNullable(gameDescription.getName()).ifPresent(builder::setName);
         ofNullable(gameDescription.getObjects()).ifPresent(builder::addAllObjects);
         return builder.build();
     }
 
-    Optional<ApiMeshDescription> getMeshDescription(String id) {
+    Optional<com.vrpg.communication.resource.MeshDescription> getMeshDescription(String id) {
         LOGGER.trace("getMeshDescription - {}", id);
 
         MeshDescription meshDescription = meshDescriptionRepository.findOne(id);
@@ -80,7 +78,7 @@ class GameDescriptionProvider {
             return empty();
         }
 
-        ApiMeshDescription.Builder builder = ApiMeshDescription.newBuilder();
+        com.vrpg.communication.resource.MeshDescription.Builder builder = com.vrpg.communication.resource.MeshDescription.newBuilder();
 
         ofNullable(meshDescription.getId()).ifPresent(builder::setId);
         ofNullable(meshDescription.getName()).ifPresent(builder::setName);
