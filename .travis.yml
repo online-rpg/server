@@ -7,3 +7,9 @@ git:
 before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
     - git submodule update --init --recursive
+
+deploy:
+    provider: heroku
+    api_key:
+      secure: a10816cd-d175-457a-9c8f-95b1aefe8fb0
+    app: vrpg-server
