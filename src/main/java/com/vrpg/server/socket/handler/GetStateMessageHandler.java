@@ -25,6 +25,6 @@ class GetStateMessageHandler extends SocketMessageHandler<GetStateMessage> {
 
     @Override
     public SocketMessageType getMessageType() {
-        return SocketMessageType.GET_STATE;
+        return SocketMessageType.GET_STATE_SOCKET;
     }
 }

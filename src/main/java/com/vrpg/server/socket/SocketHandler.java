@@ -64,7 +64,7 @@ class SocketHandler extends TextWebSocketHandler {
             SocketEnvelope socketEnvelope = SocketEnvelope.newBuilder()
                     .setSocketMessage(
                             SocketMessage.newBuilder()
-                                    .setMessageType(SocketMessageType.LEAVE)
+                                    .setMessageType(SocketMessageType.LEAVE_SOCKET)
                                     .setMessage(LeaveMessage.newBuilder()
                                             .setEventSource(aliveSessions.get(session))
                                             .build()
@@ -72,7 +72,7 @@ class SocketHandler extends TextWebSocketHandler {
                                     .build())
                     .build();
 
-            socketMessageHandlers.get(SocketMessageType.LEAVE).handleMessage(session, socketEnvelope);
+            socketMessageHandlers.get(SocketMessageType.LEAVE_SOCKET).handleMessage(session, socketEnvelope);
         }
         aliveSessions.remove(session);
     }

@@ -43,6 +43,6 @@ class JoinMessageHandler extends SocketMessageHandler<JoinMessage> {
     @Override
     public SocketMessageType getMessageType() {
         LOGGER.trace("getMessageType");
-        return SocketMessageType.JOIN;
+        return SocketMessageType.JOIN_SOCKET;
     }
 }

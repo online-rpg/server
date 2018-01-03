@@ -26,6 +26,6 @@ class MoveMessageHandler extends SocketMessageHandler<MoveMessage> {
     @Override
     public SocketMessageType getMessageType() {
         LOGGER.trace("getMessageType");
-        return SocketMessageType.MOVE;
+        return SocketMessageType.MOVE_SOCKET;
     }
 }

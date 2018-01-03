@@ -26,6 +26,6 @@ class StateMessageHandler extends SocketMessageHandler<StateMessage> {
     @Override
     public SocketMessageType getMessageType() {
         LOGGER.trace("getMessageType");
-        return SocketMessageType.STATE;
+        return SocketMessageType.STATE_SOCKET;
     }
 }

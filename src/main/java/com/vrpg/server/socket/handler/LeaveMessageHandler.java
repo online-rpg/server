@@ -38,6 +38,6 @@ class LeaveMessageHandler extends SocketMessageHandler<LeaveMessage> {
     @Override
     public SocketMessageType getMessageType() {
         LOGGER.trace("getMessageType");
-        return SocketMessageType.LEAVE;
+        return SocketMessageType.LEAVE_SOCKET;
     }
 }
