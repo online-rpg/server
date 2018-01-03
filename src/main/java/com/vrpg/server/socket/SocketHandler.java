@@ -4,8 +4,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.util.JsonFormat;
-import com.vrpg.communication.socket.SocketMessage;
-import com.vrpg.communication.socket.SocketMessageType;
+import com.vrpg.communication.model.networking.envelopes.SocketEnvelope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -33,12 +32,13 @@ class SocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         LOGGER.trace("handleTextMessage - {}, {}", session, message);
 
-        SocketMessage gameMessage = parseMessage(message.getPayload(), SocketMessage.newBuilder());
-
-        if (gameMessage.getEventType() == SocketMessageType.JOIN) {
-            aliveSessions.put(session, gameMessage.getEventSource());
-        }
-        broadcast(gameMessage, session);
+        SocketEnvelope envelope = parseMessage(message.getPayload(), SocketEnvelope.newBuilder());
+//        SocketMessage gameMessage = parseMessage(message.getPayload(), SocketMessage.newBuilder());
+//
+//        if (gameMessage.getEventType() == SocketMessageType.JOIN) {
+//            aliveSessions.put(session, gameMessage.getEventSource());
+//        }
+//        broadcast(gameMessage, session);
         super.handleTextMessage(session, message);
     }
 
@@ -54,10 +54,10 @@ class SocketHandler extends TextWebSocketHandler {
         if (aliveSessions.containsKey(session)) {
             String eventSource = aliveSessions.get(session);
 
-            broadcast(SocketMessage.newBuilder()
-                            .setEventType(SocketMessageType.LEAVE)
-                            .setEventSource(eventSource),
-                    session);
+//            broadcast(SocketMessage.newBuilder()
+//                            .setEventType(SocketMessageType.LEAVE)
+//                            .setEventSource(eventSource),
+//                    session);
         }
         aliveSessions.remove(session);
     }
