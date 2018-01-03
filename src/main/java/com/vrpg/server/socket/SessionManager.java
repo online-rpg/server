@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Component
 @Getter
-class SessionManager {
+public class SessionManager {
 
     private final Map<WebSocketSession, String> aliveSessions;
 

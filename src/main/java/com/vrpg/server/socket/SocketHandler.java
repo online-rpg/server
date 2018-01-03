@@ -2,9 +2,12 @@ package com.vrpg.server.socket;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
-import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.util.JsonFormat;
 import com.vrpg.communication.model.networking.envelopes.SocketEnvelope;
+import com.vrpg.communication.model.networking.socketmessages.SocketMessage;
+import com.vrpg.communication.model.networking.socketmessages.SocketMessageType;
+import com.vrpg.communication.model.networking.socketmessages.messages.LeaveMessage;
+import com.vrpg.server.socket.handler.SocketMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,18 +16,21 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.io.IOException;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
 class SocketHandler extends TextWebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(SocketHandler.class);
 
-    private final Map<WebSocketSession, String> aliveSessions;
+    private final SessionManager sessionManager;
+    private final Map<SocketMessageType, SocketMessageHandler> socketMessageHandlers;
 
-    SocketHandler(SessionManager sessionManager) {
-        aliveSessions = sessionManager.getAliveSessions();
+    SocketHandler(SessionManager sessionManager, Collection<SocketMessageHandler> messageHandlers) {
+        this.sessionManager = sessionManager;
+        socketMessageHandlers = messageHandlers.stream()
+                .collect(Collectors.toMap(SocketMessageHandler::getMessageType, o -> o));
     }
 
     @Override
@@ -32,48 +38,43 @@ class SocketHandler extends TextWebSocketHandler {
         LOGGER.trace("handleTextMessage - {}, {}", session, message);
 
         SocketEnvelope envelope = parseMessage(message.getPayload(), SocketEnvelope.newBuilder());
-//        SocketMessage gameMessage = parseMessage(message.getPayload(), SocketMessage.newBuilder());
-//
-//        if (gameMessage.getEventType() == SocketMessageType.JOIN) {
-//            aliveSessions.put(session, gameMessage.getEventSource());
-//        }
-//        broadcast(gameMessage, session);
+        SocketMessage socketMessage = envelope.getSocketMessage();
+
+        SocketMessageHandler messageHandler = socketMessageHandlers.get(socketMessage.getMessageType());
+        if (messageHandler != null) {
+            messageHandler.handleMessage(session, envelope);
+        } else {
+            LOGGER.warn("No messagehandler for type - {}", socketMessage.getMessageType());
+        }
+
         super.handleTextMessage(session, message);
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(WebSocketSession session) {
         LOGGER.trace("afterConnectionEstablished - {}", session);
-        aliveSessions.put(session, "");
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         LOGGER.trace("afterConnectionClosed - {}, {}", session, status);
-        if (aliveSessions.containsKey(session)) {
-            String eventSource = aliveSessions.get(session);
+        Map<WebSocketSession, String> aliveSessions = sessionManager.getAliveSessions();
 
-//            broadcast(SocketMessage.newBuilder()
-//                            .setEventType(SocketMessageType.LEAVE)
-//                            .setEventSource(eventSource),
-//                    session);
+        if (aliveSessions.containsKey(session)) {
+            SocketEnvelope socketEnvelope = SocketEnvelope.newBuilder()
+                    .setSocketMessage(
+                            SocketMessage.newBuilder()
+                                    .setMessageType(SocketMessageType.LEAVE)
+                                    .setMessage(LeaveMessage.newBuilder()
+                                            .setEventSource(aliveSessions.get(session))
+                                            .build()
+                                            .toByteString())
+                                    .build())
+                    .build();
+
+            socketMessageHandlers.get(SocketMessageType.LEAVE).handleMessage(session, socketEnvelope);
         }
         aliveSessions.remove(session);
-    }
-
-    private void broadcast(MessageOrBuilder message, WebSocketSession currentSession) {
-        try {
-            TextMessage textMessage = new TextMessage(JsonFormat.printer().print(message));
-            aliveSessions.keySet().stream().filter(s -> !Objects.equals(s, currentSession)).forEach(aliveSession -> {
-                try {
-                    aliveSession.sendMessage(textMessage);
-                } catch (IOException e) {
-                    LOGGER.warn(e.getMessage());
-                }
-            });
-        } catch (InvalidProtocolBufferException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @SuppressWarnings("unchecked")
