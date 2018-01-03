@@ -1,3 +1,3 @@
 [submodule "src/main/proto"]
 	path = src/main/proto
-	url = git@github.com:vrpg/communication-model.git
+	url = https://86904336e6946157930ddc9238ee96c6f130aaa3:x-oauth-basic@github.com/vrpg/communication-model.git
