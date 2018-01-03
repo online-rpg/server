@@ -11,5 +11,5 @@ before_install:
 deploy:
     provider: heroku
     api_key:
-      secure: a10816cd-d175-457a-9c8f-95b1aefe8fb0
+      secure: $HEROKU_API_KEY
     app: vrpg-server
