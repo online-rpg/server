@@ -13,3 +13,5 @@ deploy:
     api_key:
       secure: $HEROKU_API_KEY
     app: vrpg-server
+    on:
+      branch: master
