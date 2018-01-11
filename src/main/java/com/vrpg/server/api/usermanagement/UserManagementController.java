@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
+
 @Controller
 class UserManagementController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserManagementController.class);
@@ -26,18 +30,18 @@ class UserManagementController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, path = "/login")
-    ResponseEnvelope login(@RequestBody RequestEnvelope requestEnvelope) {
-        LOGGER.trace("login - {}", requestEnvelope);
+    ResponseEnvelope login(HttpServletRequest request) throws IOException {
+        LOGGER.trace("login - {}", request);
 
-        return handle(requestEnvelope, RequestType.LOGIN_REQUEST);
+        return handle(RequestEnvelope.parseFrom(request.getInputStream()), RequestType.LOGIN_REQUEST);
     }
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST, path = "/register")
-    ResponseEnvelope register(@RequestBody RequestEnvelope requestEnvelope) {
-        LOGGER.trace("register - {}", requestEnvelope);
+    ResponseEnvelope register(HttpServletRequest request) throws IOException {
+        LOGGER.trace("register - {}", request);
 
-        return handle(requestEnvelope, RequestType.REGISTER_REQUEST);
+        return handle(RequestEnvelope.parseFrom(request.getInputStream()), RequestType.REGISTER_REQUEST);
     }
 
     private ResponseEnvelope handle(RequestEnvelope requestEnvelope, RequestType acceptedRequestType) {
