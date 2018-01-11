@@ -1,4 +1,4 @@
-package com.vrpg.server.resource;
+package com.vrpg.server.api.resource;
 
 import com.vrpg.server.mongo.BlenderObject;
 import com.vrpg.server.mongo.BlenderObjectRepository;

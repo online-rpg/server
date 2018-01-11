@@ -1,4 +1,4 @@
-package com.vrpg.server.resource;
+package com.vrpg.server.api.resource;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

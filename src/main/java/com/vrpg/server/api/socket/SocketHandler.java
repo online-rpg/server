@@ -1,4 +1,4 @@
-package com.vrpg.server.socket;
+package com.vrpg.server.api.socket;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
@@ -7,7 +7,7 @@ import com.vrpg.communication.model.networking.envelopes.SocketEnvelope;
 import com.vrpg.communication.model.networking.socketmessages.SocketMessage;
 import com.vrpg.communication.model.networking.socketmessages.SocketMessageType;
 import com.vrpg.communication.model.networking.socketmessages.messages.LeaveMessage;
-import com.vrpg.server.socket.handler.SocketMessageHandler;
+import com.vrpg.server.api.socket.handler.SocketMessageHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

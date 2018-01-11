@@ -1,4 +1,4 @@
-package com.vrpg.server.management;
+package com.vrpg.server.api.management;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,4 +1,4 @@
-package com.vrpg.server.socket;
+package com.vrpg.server.api.socket;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;
