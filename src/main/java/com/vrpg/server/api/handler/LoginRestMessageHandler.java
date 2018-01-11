@@ -2,6 +2,7 @@ package com.vrpg.server.api.handler;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.vrpg.communication.model.networking.envelopes.AuthInfo;
 import com.vrpg.communication.model.networking.requests.RequestType;
 import com.vrpg.communication.model.networking.requests.messages.LoginRequestMessage;
 import com.vrpg.communication.model.networking.responses.ResponseType;
@@ -23,6 +24,7 @@ class LoginRestMessageHandler extends AbstractRestMessageHandler<LoginRequestMes
     private final TokenStore tokenStore;
 
     LoginRestMessageHandler(UserStore userStore, TokenStore tokenStore) {
+        super(tokenStore);
         this.userStore = userStore;
         this.tokenStore = tokenStore;
     }
@@ -44,6 +46,11 @@ class LoginRestMessageHandler extends AbstractRestMessageHandler<LoginRequestMes
                     .setRefreshToken(token.getRefreshToken())
                     .build();
         }
+    }
+
+    @Override
+    void auth(AuthInfo authInfo) {
+        LOGGER.trace("auth - {}", authInfo);
     }
 
     @Override

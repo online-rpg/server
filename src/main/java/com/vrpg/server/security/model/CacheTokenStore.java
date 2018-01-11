@@ -2,6 +2,7 @@ package com.vrpg.server.security.model;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.vrpg.server.datasource.CacheRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +21,29 @@ class CacheTokenStore implements TokenStore {
     private static final String SECRET = "ThisIsASecret";
 
     private final CacheRepository<UserToken> repository;
+    private final Algorithm algorithm;
 
     CacheTokenStore(CacheRepository<UserToken> repository) {
         this.repository = repository;
+
+        try {
+            algorithm = Algorithm.HMAC512(SECRET);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public boolean isTokenExists(String id) {
-        LOGGER.trace("isTokenExists - {}", id);
-        return repository.findOne(id) != null;
+    public boolean isTokenExists(String token) {
+        LOGGER.trace("isTokenExists - {}", token);
+
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+
+        DecodedJWT decodedJWT = JWT.require(algorithm).build().verify(token);
+
+        return repository.findOne(decodedJWT.getSubject()) != null;
     }
 
     @Override
@@ -40,13 +55,6 @@ class CacheTokenStore implements TokenStore {
     @Override
     public UserToken createToken(User user) {
         LOGGER.trace("createToken - {}", user);
-        Algorithm algorithm;
-        try {
-            algorithm = Algorithm.HMAC512(SECRET);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
         LocalDateTime now = now();
 
         String accessToken = JWT.create()

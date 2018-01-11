@@ -2,7 +2,7 @@ package com.vrpg.server.security.model;
 
 public interface TokenStore {
 
-    boolean isTokenExists(String id);
+    boolean isTokenExists(String token);
 
     void saveToken(UserToken token);
 
